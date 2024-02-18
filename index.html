@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <title>Exercício do Pássaro</title>
+    <style>
+        body {
+
+             /* Esta seção determina as configurações de estilização do programa, em CSS*/
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+
+        // O config e a scene ''instalam'' o Phaser e configuram a cena da animação
+
+        var config = {
+            type: Phaser.AUTO,
+            width: 1000,
+            height: 667,
+    
+            scene: {
+                preload: preload, 
+                create: create,
+                update: update
+            }
+        };
+    
+        var game = new Phaser.Game(config);
+        var passarinho; /* Criação de uma variável 'passarinho' que será utilizado como um sprite abaixo */
+
+        for (i = 0; i < 10; i++) {
+            console.log('Passarinho');
+        } // Implementação de um laço de repetição executado no console do navegador
+
+        function preload() {
+            this.load.image('bg', 'assets/imagem_de_freepik.jpg');
+            this.load.spritesheet('passaro', 'assets/bird-green.png', { frameWidth: 75, frameHeight: 75 }); /* ! Interessante: Dentro da programação com o framework Phaser, 'upamos' uma única imagem com vários frames e obtemos a ilusão de animação dela ao configurar a leitura dela em vários pedacinhos de tamanhos equivalentes */
+        }
+    
+        function create() {
+
+            this.add.image(400, 300, 'bg').setScale(1.2);
+            
+            passarinho = this.add.sprite(100, 300, 'passaro').setScale(1.3); /* Passarinho é adicionado como um sprite em vez de imagem, pois essa configuração permite maior abrangência na sua utilização */
+
+            this.anims.create({ /* Aqui configura-se a animação em si;  */
+                key: 'voar',
+                frames: this.anims.generateFrameNumbers('passaro', {start: 0, end: 7}), /* A leitura é da esquerda pra direita, cima para baixo. O primeiro frame está no índice 0, e assim continua. Aqui, queremos a leitura da primeira imagem até a oitava, portanto, de 0 a 7 */
+                frameRate: 10,
+                repeat: -1
+            }); 
+
+          passarinho.anims.play('voar', true); // Reproduz a animação
+
+        }
+    
+        function update() {
+
+            // O update já é um laço de repetição. Colocar um laço de repetição aqui como while ou for seria complicado pois não haveria tempo suficiente para executar o while e o update
+
+
+            if (passarinho.x === 100) {
+                passarinho.setFlip(false, false);
+                passarinho.ida = true;
+                explicacao1 = "Aqui verifica-se se o passarinho está no ponto 100 no eixo x e, caso verdadeiro, será definido que ele está na ida atribuindo o valor true ao .ida"; /* Para visualização da resposta, favor abrir comando console.log(explicacao1)  */
+            }
+
+            if (passarinho.x < 800 && passarinho.ida === true) {
+                passarinho.x += 5;
+                passarinho.y -= 0.7;
+                explicacao2 = "Neste passo, verifica-se se o passarinho está começando o percurso (passarinho.ida = true) e se ele está na posição anterior a 800 no eixo x. Sempre que essas duas condições forem verdadeiras, o passarinho irá incrementar sua posição em x e decrescer em y, para que tenha-se a ilusão de vôo ascendente"; /* Para visualização da resposta, favor abrir comando console.log(explicacao2)  */
+
+            }
+
+            if (passarinho.x === 800) {
+                passarinho.setFlip(true, false);
+                passarinho.ida = false;
+                explicacao3 = "Neste passo, verifica-se se o passarinho está no final do percurso (ponto 800 no eixo x) e, se sim, é feito o seu espelhamento da imagem e atualiza-se o estado da ida do passarinho como falsa."; /* Para visualização da resposta, favor abrir comando console.log(explicacao3) */
+            }
+
+            if (passarinho.x > 100 && passarinho.ida === false) {
+                explicacao4 = "Aqui é feita a verificação se o passarinho está voltando, afinal, seu estado de ida é falso e está em posição > 100 no eixo x, o que, caso verdadeiro, indica que seu movimento é de retorno. Então, com o próximo comando é feito o decréscimo de sua posição, criando a ilusão de um movimento de volta à sua posição inicial." /* Para visualização da resposta, favor abrir comando console.log(explicacao4)  */
+                passarinho.x -= 5;
+                passarinho.y += 0.7;
+
+            }
+
+        }
+    
+    </script>
+
+</body>
+</html>
+
+
